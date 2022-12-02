@@ -14,7 +14,7 @@ func main() {
 		//Store:            db,
 		Port:             os.Getenv("PORT"),
 		Guid:             os.Getenv("GUID"),
-		URL_telegram:     os.Getenv("TELEGA"),
+		Token_Telegram:   os.Getenv("TELEGA_TOKEN"),
 		URL_dataProvider: os.Getenv("DATA_PROVIDER"),
 	}
 

@@ -20,7 +20,7 @@ type ApiInterface struct {
 	//Store            dataStore
 	Port             string
 	Guid             string
-	URL_telegram     string
+	Token_Telegram   string
 	URL_dataProvider string
 }
 
@@ -47,7 +47,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 		sendMessageToTelegram(
 			body.Message.Chat.ID,
 			"Для получения заказа на текущий день, укажите ID пользователя \n\nСохранить\\перезаписать свой номер: My-ID пользователя \n(пример: My-123)",
-			ai.URL_telegram,
+			ai.Token_Telegram,
 		)
 	}
 
@@ -72,7 +72,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 			sendMsgBtn(
 				body.Message.Chat.ID,
 				UserPortalID,
-				ai.URL_telegram,
+				ai.Token_Telegram,
 			)
 		}
 	}
@@ -82,7 +82,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if err := getFoodDish(body.Message.Chat.ID, UserPersonPortalID, ai.URL_telegram, ai.Guid, ai.URL_dataProvider); err != nil {
+	if err := getFoodDish(body.Message.Chat.ID, UserPersonPortalID, ai.Token_Telegram, ai.Guid, ai.URL_dataProvider); err != nil {
 		fmt.Println("error in sending reply:", err)
 		return
 	}
@@ -90,7 +90,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("reply sent")
 }
 
-func sendMsgBtn(chatID int64, userID int, URL_telegram string) error {
+func sendMsgBtn(chatID int64, userID int, Token_Telegram string) error {
 	reqBody := &sendMessageBtnReqBody{
 		ChatID: chatID,
 		Text:   "Сохранен номер: " + fmt.Sprint(userID),
@@ -107,7 +107,7 @@ func sendMsgBtn(chatID int64, userID int, URL_telegram string) error {
 		return err
 	}
 	// Send a post request with your token
-	_, err = http.Post(URL_telegram, "application/json", bytes.NewBuffer(reqBytes))
+	_, err = http.Post("https://api.telegram.org/bot"+Token_Telegram+"/sendMessage", "application/json", bytes.NewBuffer(reqBytes))
 
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func sendMsgBtn(chatID int64, userID int, URL_telegram string) error {
 }
 
 // sendMessageToTelegram Оправка сообщения на сервер телеграмма
-func sendMessageToTelegram(chatID int64, message string, URL_telegram string) error {
+func sendMessageToTelegram(chatID int64, message string, Token_Telegram string) error {
 	// Create the request body struct
 	reqBody := &sendMessageReqBody{
 		ChatID: chatID,
@@ -129,7 +129,7 @@ func sendMessageToTelegram(chatID int64, message string, URL_telegram string) er
 		return err
 	}
 	// Send a post request with your token
-	res, err := http.Post(URL_telegram, "application/json", bytes.NewBuffer(reqBytes))
+	res, err := http.Post("https://api.telegram.org/bot"+Token_Telegram+"/sendMessage", "application/json", bytes.NewBuffer(reqBytes))
 
 	if err != nil {
 		return err
@@ -143,7 +143,7 @@ func sendMessageToTelegram(chatID int64, message string, URL_telegram string) er
 }
 
 // getFoodDish Получение заказа от сервиса еды
-func getFoodDish(chatID int64, UserID int, URL_telegram string, Guid string, URL_dataProvider string) error {
+func getFoodDish(chatID int64, UserID int, Token_Telegram string, Guid string, URL_dataProvider string) error {
 	tm := time.Now()
 	tmStr := tm.Format("01-02-2006")
 
@@ -159,7 +159,7 @@ func getFoodDish(chatID int64, UserID int, URL_telegram string, Guid string, URL
 	}
 
 	response := "Заказ на " + time.Now().Format("02-01-2006") + "\r\n" + string(body)
-	err = sendMessageToTelegram(chatID, response, URL_telegram)
+	err = sendMessageToTelegram(chatID, response, Token_Telegram)
 	if err != nil {
 		return err
 	}
