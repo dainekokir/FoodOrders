@@ -2,16 +2,16 @@ package main
 
 import (
 	f_api "TelegramOfficeFood/api"
-	store "TelegramOfficeFood/db"
+	//store "TelegramOfficeFood/db"
 	"net/http"
 	"os"
 )
 
 func main() {
-	db := store.InitDb()
-	db.Open(os.Getenv("DATABASE_URL"))
+	//db := store.InitDb()
+	//db.Open(os.Getenv("DATABASE_URL"))
 	api := f_api.ApiInterface{
-		Store:            db,
+		//Store:            db,
 		Port:             os.Getenv("PORT"),
 		Guid:             os.Getenv("GUID"),
 		URL_telegram:     os.Getenv("TELEGA"),

@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-type dataStore interface {
-	AddRequest(string)
-}
+//	type dataStore interface {
+//		AddRequest(string)
+//	}
 type ApiInterface struct {
-	Store            dataStore
+	//Store            dataStore
 	Port             string
 	Guid             string
 	URL_telegram     string
@@ -25,7 +25,7 @@ type ApiInterface struct {
 }
 
 func (ai *ApiInterface) Test(w http.ResponseWriter, r *http.Request) {
-	ai.Store.AddRequest("This_is_shit_was_start")
+	//ai.Store.AddRequest("This_is_shit_was_start")
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("This_is_shit_was_start"))
@@ -40,7 +40,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	ai.Store.AddRequest(body.Message.Text)
+	//ai.Store.AddRequest(body.Message.Text)
 	fmt.Println("Handler get", body.Message.Text)
 
 	if body.Message.Text == "/start" {
