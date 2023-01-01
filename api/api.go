@@ -46,7 +46,7 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 	if body.Message.Text == "/start" {
 		sendMessageToTelegram(
 			body.Message.Chat.ID,
-			"Для получения заказа на текущий день, укажите ID пользователя \n\nСохранить\\перезаписать свой номер: My-Номер пользователя \n(пример: My-123)",
+			"Для получения заказа на текущий день, укажите ID пользователя \n\nСохранить\\перезаписать свой номер: добавить # перед номером без пробелов \n(пример: #123)",
 			ai.Token_Telegram,
 		)
 	}
@@ -54,15 +54,15 @@ func (ai *ApiInterface) Order(res http.ResponseWriter, req *http.Request) {
 	if body.Message.Text == "/setmynumber" {
 		sendMessageToTelegram(
 			body.Message.Chat.ID,
-			"Указать свой номер: My-Номер пользователя \n(пример: My-123)",
+			"Указать свой номер: добавить # перед номером без пробелов \n(пример: #123)",
 			ai.Token_Telegram,
 		)
 	}
 
-	matched, err := regexp.MatchString(`^my-\d+$`, strings.ToLower(body.Message.Text))
+	matched, err := regexp.MatchString(`^#\d+$`, strings.ToLower(body.Message.Text))
 	if matched {
 		UserPortalID := 0
-		re, err := regexp.Compile(`^my-(?P<number>\d+)$`)
+		re, err := regexp.Compile(`^#(?P<number>\d+)$`)
 		if err != nil {
 			return
 		}
