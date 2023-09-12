@@ -156,7 +156,13 @@ func getFoodDish(chatID int64, UserID int, Token_Telegram string, Guid string, U
 	tmStr := tm.Format("01-02-2006")
 
 	query := URL_dataProvider + "?UserId=" + strconv.Itoa(UserID) + "&Date=" + tmStr + "&Guid=" + Guid
-	resp, err := http.Get(query)
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	
+	resp, err := client.Get(query)
 	if err != nil {
 		return err
 	}
