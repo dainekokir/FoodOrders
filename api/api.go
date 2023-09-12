@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -161,7 +162,7 @@ func getFoodDish(chatID int64, UserID int, Token_Telegram string, Guid string, U
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	
+
 	resp, err := client.Get(query)
 	if err != nil {
 		return err
