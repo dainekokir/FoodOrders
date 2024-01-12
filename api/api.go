@@ -175,8 +175,6 @@ func getFoodDish(chatID int64, UserID int, Token_Telegram string, Guid string, U
 
 	response := "Заказ на " + time.Now().Format("02-01-2006") + "\r\n" + string(body)
 
-	fmt.Println(response, "chat_id= ", chatID)
-
 	err = sendMessageToTelegram(chatID, response, Token_Telegram)
 	if err != nil {
 		return err
